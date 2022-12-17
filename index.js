@@ -44,9 +44,22 @@ async function run() {
       const result = await usersCollection.insertOne(user);
       res.send(result)
     })
+
+    app.get('/posts', async (req, res) => {
+      const query = {};
+      const result = await postsCollection.find(query).toArray();
+      res.send(result)
+    })
     app.post('/posts', async (req, res) => {
       const user = req.body;
       const result = await postsCollection.insertOne(user);
+      res.send(result)
+    })
+    app.delete('/post', async (req, res) => {
+      const id = req.query.id;
+      const query={_id: ObjectId(id)}
+      console.log(id);
+      const result = await postsCollection.deleteOne(query);
       res.send(result)
     })
     
