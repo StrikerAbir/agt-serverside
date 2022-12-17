@@ -28,19 +28,25 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const usersCollection = client.db('agtServer').collection('users');
+    const postsCollection = client.db('agtServer').collection('posts');
 
     app.get('/user', async (req, res) => {
       const uname = req.query.name;
       const query = { name: uname }
       const result = await usersCollection.findOne(query);
       if (result) {
-        res.send(true);
+        res.send({available:true, email: result.email});
       }else{res.send(false)}
 
     })
     app.post('/user', async (req, res) => {
       const user = req.body;
       const result = await usersCollection.insertOne(user);
+      res.send(result)
+    })
+    app.post('/posts', async (req, res) => {
+      const user = req.body;
+      const result = await postsCollection.insertOne(user);
       res.send(result)
     })
     
