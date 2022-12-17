@@ -29,6 +29,7 @@ async function run() {
   try {
     const usersCollection = client.db('agtServer').collection('users');
     const postsCollection = client.db('agtServer').collection('posts');
+    const commentCollection = client.db('agtServer').collection('comments');
 
     app.get('/user', async (req, res) => {
       const uname = req.query.name;
@@ -82,7 +83,21 @@ async function run() {
       const result = await postsCollection.updateOne(query, updatedDoc);
       res.send(result)
     })
+    app.patch('/likeUpdate', async (req, res) => {
+      const id = req.query.id;
+      const query = { _id: ObjectId(id) }
+      const {upLike}=req.body
+      // console.log(id,upLike);
+       const updatedDoc = {
+         $set: {
+           like: upLike
+         },
+      };
+      const result = await postsCollection.updateOne(query, updatedDoc);
+      res.send(result)
+    })
     
+    // app.patch()
   } finally {
   }
 }
