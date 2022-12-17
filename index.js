@@ -57,9 +57,29 @@ async function run() {
     })
     app.delete('/post', async (req, res) => {
       const id = req.query.id;
-      const query={_id: ObjectId(id)}
-      console.log(id);
+      // console.log(id);
       const result = await postsCollection.deleteOne(query);
+      res.send(result)
+    })
+
+    app.get('/upPost/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = {_id: ObjectId(id)}
+      const result = await postsCollection.findOne(query)
+      res.send(result)
+    })
+    app.patch('/postUpdate', async (req, res) => {
+      const id = req.query.id;
+      const query = { _id: ObjectId(id) }
+      const {upPost}=req.body
+      console.log(id,upPost);
+       const updatedDoc = {
+         $set: {
+           post: upPost
+         },
+      };
+      const result = await postsCollection.updateOne(query, updatedDoc);
       res.send(result)
     })
     
